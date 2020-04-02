@@ -15,11 +15,13 @@ class BackblazeB2ServiceProvider extends ServiceProvider
         Storage::extend('b2', function ($app, $config) {
             if (!(
                 isset($config['accountId']) ||
+                isset($config['keyId']) ||
                 isset($config['applicationKey']) ||
-                isset($config['bucketName']))) {
-                throw new BackblazeException('Please set all configuration keys. (accountId, applicationKey, bucketName)');
+                isset($config['bucketName'])
+            )) {
+                throw new BackblazeException('Please set all configuration keys. (accountId, keyId, applicationKey, bucketName)');
             }
-            $client = new BackblazeClient($config['accountId'], $config['applicationKey']);
+            $client = new BackblazeClient($config['accountId'], $config['keyId'], $config['applicationKey']);
             $adapter = new BackblazeAdapter($client, $config['bucketName']);
 
             return new Filesystem($adapter);
